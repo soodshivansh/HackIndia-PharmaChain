@@ -1,36 +1,50 @@
-<div align="center">
+# React + TypeScript + Vite
 
-# PharmAssist
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-### Smart pill tracking app for personalized medication management and improved patient adherence.
+Currently, two official plugins are available:
 
-### 🔗 [**Live demo**](https://verdant-melba-81c6c0.netlify.app/)
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-[![Netlify Status](https://api.netlify.com/api/v1/badges/b0b3fc08-72d5-49d9-ad52-ccd648b7713f/deploy-status)](https://app.netlify.com/sites/verdant-melba-81c6c0/deploys)
+## Expanding the ESLint configuration
 
-</div>
+If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
 
-### Built using
+- Configure the top-level `parserOptions` property like this:
 
-- `React`
-- `JavaScript`
-- `Chakra UI`
-- `Firebase`
-- `openFDA API`
+```js
+export default tseslint.config({
+  languageOptions: {
+    // other options...
+    parserOptions: {
+      project: ['./tsconfig.node.json', './tsconfig.app.json'],
+      tsconfigRootDir: import.meta.dirname,
+    },
+  },
+})
+```
 
-### Features
+- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
+- Optionally add `...tseslint.configs.stylisticTypeChecked`
+- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
 
-- Secure account creation and login, authorization using Google OAuth.
-- Easy to use, dynamic, user-interface allowing for a smooth user experience.
-- Ability to add and save medications and associate them with a specific time of day(s).
-- Daily medication list tracker generated for the user.
-- Drug look-up feature for over 300 of the most prescribed generic medications.
+```js
+// eslint.config.js
+import react from 'eslint-plugin-react'
 
-### Demo
-
-![login](https://github.com/MokahalA/PharmAssist/blob/main/Screenshots/Login.png)
-
-https://github.com/MokahalA/PharmAssist/assets/45024346/970cfad2-b1bb-45cc-a959-6f92f0b14190
-
-![lookup](https://github.com/MokahalA/PharmAssist/blob/main/Screenshots/Lookup.png)
-</br>
+export default tseslint.config({
+  // Set the react version
+  settings: { react: { version: '18.3' } },
+  plugins: {
+    // Add the react plugin
+    react,
+  },
+  rules: {
+    // other rules...
+    // Enable its recommended rules
+    ...react.configs.recommended.rules,
+    ...react.configs['jsx-runtime'].rules,
+  },
+})
+```
