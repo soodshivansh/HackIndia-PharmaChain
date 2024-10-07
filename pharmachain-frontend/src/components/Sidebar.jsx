@@ -24,7 +24,6 @@ export default function Sidebar({ firstName, lastName }) {
   return (
     <SidebarContext.Provider value={{ activeTab, setActiveTab }}>
       <div className="min-h-screen flex bg-gray-100">
-        {/* Sidebar */}
         <div
           className={`${
             isOpen ? 'block' : 'hidden'
@@ -33,7 +32,6 @@ export default function Sidebar({ firstName, lastName }) {
           <SidebarContent />
         </div>
 
-        {/* Main Content */}
         <div className="flex-1">
           <MobileNav firstName={firstName} lastName={lastName} onOpen={toggleSidebar} />
           {activeTab === 'Home' && <Home />}

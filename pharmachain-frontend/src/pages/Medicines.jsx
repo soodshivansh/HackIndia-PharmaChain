@@ -8,14 +8,13 @@ import QRCode from 'react-qr-code';
 
 const Medicines = () => {
     const [medicines, setMedicines] = useState(() => {
-        // Retrieve medicines from localStorage
         const storedMedicines = localStorage.getItem('medicines');
         return storedMedicines ? JSON.parse(storedMedicines) : [];
       });
   const [web3, setWeb3] = useState(null);
   const [contract, setContract] = useState(null);
   const [account, setAccount] = useState(null);
-  const [loading, setLoading] = useState(false);  // For loading state
+  const [loading, setLoading] = useState(false);
 
   const contractAddress = "0x3A885338d3e5F022A087079Ff249cCFB6250e5Be";
   const contractABI = [
@@ -233,13 +232,12 @@ const Medicines = () => {
     }
   ];
 
-  // Initialize Web3 and connect to MetaMask
   useEffect(() => {
     const initWeb3 = async () => {
       if (window.ethereum) {
         try {
           const web3 = new Web3(window.ethereum);
-          await window.ethereum.request({ method: 'eth_requestAccounts' }); // Enable MetaMask
+          await window.ethereum.request({ method: 'eth_requestAccounts' });
           const accounts = await web3.eth.getAccounts();
           const contract = new web3.eth.Contract(contractABI, contractAddress);
 
@@ -261,7 +259,6 @@ const Medicines = () => {
   }, []);
 
 
-// Inside your registerMedicine function
 const registerMedicine = async (e) => {
     e.preventDefault();
     if (!contract || !account) return;
@@ -277,21 +274,18 @@ const registerMedicine = async (e) => {
             .registerMedicine(batchNumber, name, manufacturer, expiryDate)
             .send({ from: account });
 
-        // Generate QR Code URL using the batchNumber
         const qrCodeData = `Batch Number: ${batchNumber}, Name: ${name}, Manufacturer: ${manufacturer}, Expiry Date: ${expiryDate}`;
         const qrCodeURL = `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(qrCodeData)}&size=200x200`;
         
-        // Store medicine details with QR code URL in local state
         const newMedicine = {
             batchNumber,
             name,
             manufacturer,
             expiryDate,
             status: "manufactured",
-            qrCodeURL // Add QR Code URL to medicine details
+            qrCodeURL
         };
 
-        // Update state with new medicine
         setMedicines((prevMedicines) => [...prevMedicines, newMedicine]);
     } catch (error) {
         console.error("Error registering medicine", error);
@@ -333,7 +327,6 @@ const registerMedicine = async (e) => {
 
   return (
     <div className="min-h-screen bg-gray-900 text-white p-8">
-      {/* Banner with message and button */}
       <div className="bg-blue-800 text-center py-8 rounded-md mb-6">
         <h1 className="text-3xl font-bold mb-4">Manage Your Medicines</h1>
         <p className="text-lg mb-6">Easily register new medicines and keep track of your inventory.</p>
@@ -364,7 +357,6 @@ const registerMedicine = async (e) => {
         </Dialog>
       </div>
 
-      {/* Container with all medicines */}
       <div className="bg-gray-800 p-6 rounded-md">
         <h2 className="text-2xl font-bold mb-4">Medicine Details</h2>
         {loading ? (
